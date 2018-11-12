@@ -1,23 +1,36 @@
 var express  = require('express');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var worldRouter = require('./routes/v1/world');
+var api = require('./routes/v1/api');
 var path = require('path'); 
 var log = require('./libs/log')(module);
 var config = require('./libs/config');
+var mongoose = require('mongoose');
+
+mongoose.connect(config.get('mongoose:uri'), { useNewUrlParser: true });
+mongoose.set('useCreateIndex', true);
+
+var db = mongoose.connection;
+
+db.on('error', function (err) {
+    log.error('connection error:', err.message);
+});
 
 var app = express();
 
 app.use(methodOverride('X-HTTP-Method-Override'));
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:4200");  //* will allow from all cross domain
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    next();
+});
 app.use(express.static(path.join(__dirname, "public")));
 
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-
-// parse application/json
 app.use(bodyParser.json());
 
-app.use('/api/v1', worldRouter);
+app.use('/api/v1', api);
 
 app.use(function(req, res, next){
     res.status(404);
@@ -32,7 +45,6 @@ app.use(function(err, req, res, next){
     res.send({ error: err.message });
     return;
 });
-
 
 app.listen(config.get('port'), function(){
     log.info('Express server listening on port ' + config.get('port'));
