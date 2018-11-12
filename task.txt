@@ -1,0 +1,18 @@
+Ulesanne_WS
+Kasutage andmed andmebaasist world_student (PostgreSQL) (tehke varukoopiat (backup) INSERT... tabelid country, city - salvestage data.sql)
+Valige tehnoloogia
+Java, Spring
+PHP, Slim, Laravel ...
+ASP.NET Web API
+Node.js, Express...
+Looge andmebaasi (Code First, Migrations)
+Koostage RESTful veebiteenused:
+GET: 
+api/v1/world/country/all, 
+api/v1/world/country/continent/{name} (Europa)
+api/v1/world/country/{name}/city/all (..country/Estonia/city/all)
+2-3 oma varianti
+POST, PUT, DELETE - kasutage tabeli city (lisage Kohtla-Järve, Jõhvi, Narva)
+Kasutage Autentimine, Autorisatsioon (Basic, OAuth2, JWT or ...)
+Kirjutage testid
+Koostage esitlus
