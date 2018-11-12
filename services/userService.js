@@ -1,11 +1,12 @@
-var User = require('../models/user');
+var UserModel = require('../models/user');
 var config = require('../libs/config');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+var log = require('../libs/log')(module);
 
 exports.createUser = async function (user) {
     var hashedPassword = bcrypt.hashSync(user.password, 8);
-    var newUser = new User({
+    var newUser = new UserModel({
         name: user.name,
         email: user.email,
         date: new Date(),
@@ -14,21 +15,22 @@ exports.createUser = async function (user) {
 
     try {
         var savedUser = await newUser.save();
-        var token = jwt.sign({id: savedUser._id}, config.get('secret'), {
+        var token = jwt.sign({email: savedUser.email}, config.get('secret'), {
             expiresIn: 60 * 60 * 2 // expires in 2 hours
         });
         return token;
     } catch (e) {  
+        log.info(e.message);
         throw Error("Error while Creating User")
     }
 }
 
 exports.loginUser = async function (user) {
     try {
-        var _details = await User.findOne({ email: user.email });
+        var _details = await UserModel.findOne({ email: user.email });
         var passwordIsValid = bcrypt.compareSync(user.password, _details.password);
         if (!passwordIsValid) throw Error("Invalid username/password")
-        var token = jwt.sign({id: _details._id}, config.get('secret'), {
+        var token = jwt.sign({email: _details.email}, config.get('secret'), {
             expiresIn: 60 * 60 * 2 // expires in 2 hours
         });
         return token;
@@ -39,7 +41,7 @@ exports.loginUser = async function (user) {
 
 exports.deleteUser = async function (id) {
     try {
-        var deleted = await User.remove({_id: id})
+        var deleted = await UserModel.remove({_id: id})
         if (deleted.n === 0 && deleted.ok === 1) {
             throw Error("User Could not be deleted")
         }
@@ -55,9 +57,18 @@ exports.getUsers = async function (query, page, limit) {
         limit
     }
     try {
-        var Users = await User.paginate(query, options)
+        var Users = await UserModel.paginate(query, options)
         return Users;
        } catch (e) {
         throw Error('Error while Paginating Users');
+    }
+}
+
+exports.getUserByEmail = async function (email) { 
+    try {
+        var User = await UserModel.findOne({email: email})
+        return User;
+       } catch (e) {
+        throw Error('Error while Finding User by email');
     }
 }

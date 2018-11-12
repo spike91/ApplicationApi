@@ -1,15 +1,20 @@
-var jwt = require('jsonwebtoken');
-var config = require('../libs/config');
+var UserService = require('../services/userService');
+var log = require('../libs/log')(module);
 
 var authorization = function (req, res, next) {
-    var token = req.headers['x-access-token'];
-    var msg = {auth: false, message: 'No token provided.'};
-    if (!token) res.status(500).send(msg);
-    jwt.verify(token, config.get('secret'), function (err, decoded) {
-        var msg = {auth: false, message: 'Failed to authenticate token.'};
-        if (err) res.status(500).send(msg);
-        next();
-    });
+    var email = req.decoded.email;
+    var msg = {auth: false, message: 'Permissions denied.'};
+    UserService.getUserByEmail(email).then(function(result){
+            if(result == null) {
+                res.status(500).send(msg);
+            } else 
+            if (!result.isAdmin) res.status(500).send(msg);
+            else next();
+        },
+        function (error) {
+            res.status(500).send(msg);
+        }); 
+    
 }
 
 module.exports = authorization;

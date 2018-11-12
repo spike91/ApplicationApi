@@ -41,7 +41,7 @@ app.use(function(req, res, next){
 
 app.use(function(err, req, res, next){
     res.status(err.status || 500);
-    log.error('Internal error(%d): %s',res.statusCode,err.message);
+    log.error('Internal error('+ res.statusCode +'): ' + err.message);
     res.send({ error: err.message });
     return;
 });

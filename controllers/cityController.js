@@ -33,7 +33,7 @@ exports.city_by_country_name_list = function(req, res) {
     });
 };
 
-exports.city_create = function(req, res) {
+exports.create = function(req, res) {
     var city = new CityModel({
         id: req.body.id,
         name: req.body.name,
@@ -56,6 +56,46 @@ exports.city_create = function(req, res) {
                 res.send({ error: 'Server error' });
             }
             log.error('Internal error(%d): %s',res.statusCode,err.message);
+        }
+    });
+};
+
+exports.getById = function(req, res) {
+    return CityModel.findById(req.params.id, function (err, city) {
+        if(!city) {
+            res.statusCode = 404;
+            return res.send({ error: 'Not found' });
+        }
+        if (!err) {
+            return res.send({ status: 'OK', city:city });
+        } else {
+            res.statusCode = 500;
+            log.error('Internal error(%d): %s',res.statusCode,err.message);
+            return res.send({ error: 'Server error' });
+        }
+    });
+};
+
+exports.update = function(req, res) {
+    return CityModel.findByIdAndUpdate(req.params.id, {$set: req.body}, function(err, city){
+        if (!err) {
+            return res.send({ status: 'OK', message: 'City updated.' });
+        }else {
+            res.statusCode = 500;
+            log.error('Internal error(%d): %s',res.statusCode,err.message);
+            return res.send({ error: 'Server error' });
+        }
+    });
+};
+
+exports.delete = function(req, res) {
+    return CityModel.findByIdAndDelete(req.params.id, {$set: req.body}, function(err, city){
+        if (!err) {
+            return res.send({ status: 'OK', city: city});
+        }else {
+            res.statusCode = 500;
+            log.error('Internal error(%d): %s',res.statusCode,err.message);
+            return res.send({ error: 'Server error' });
         }
     });
 };
