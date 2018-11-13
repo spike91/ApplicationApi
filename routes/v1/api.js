@@ -26,6 +26,7 @@ router.post('/world/country', Authentification, Authorization, CountryController
 // Cities GET
 
 router.get('/world/country/:name/city/all', Authentification, CityController.city_by_country_name_list);
+router.get('/world/city', Authentification, CityController.city_list);
 
 // City CRUD
 

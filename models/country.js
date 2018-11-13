@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+var mongoosePaginate = require('mongoose-paginate');
 var Schema = mongoose.Schema;
 
 // Schemas
@@ -21,6 +21,7 @@ var Country = new Schema({
         required: true }
 });
 
+Country.plugin(mongoosePaginate);
 var CountryModel = mongoose.model('Country', Country);
 
 module.exports.CountryModel = CountryModel;

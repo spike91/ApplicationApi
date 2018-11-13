@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
-
+var mongoosePaginate = require('mongoose-paginate');
 var Schema = mongoose.Schema;
 
 // Schemas
-var City = new Schema({
+var citySchema = new Schema({
     id: { type: Number, unique: true },
     name: { type: String, maxlength: 100},
     countrycode: { type: String, maxlength: 3, minlength: 3},
@@ -11,6 +11,7 @@ var City = new Schema({
     population: { type: Number, default: 0 }
 });
 
-var CityModel = mongoose.model('City', City);
+citySchema.plugin(mongoosePaginate);
+var CityModel = mongoose.model('City', citySchema);
 
 module.exports.CityModel = CityModel;
