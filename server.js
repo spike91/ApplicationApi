@@ -6,15 +6,7 @@ var path = require('path');
 var log = require('./libs/log')(module);
 var config = require('./libs/config');
 var mongoose = require('mongoose');
-
-mongoose.connect(config.get('mongoose:uri'), { useNewUrlParser: true });
-mongoose.set('useCreateIndex', true);
-
-var db = mongoose.connection;
-
-db.on('error', function (err) {
-    log.error('connection error:', err.message);
-});
+var connection = require('./libs/mongoose').connection;
 
 var app = express();
 

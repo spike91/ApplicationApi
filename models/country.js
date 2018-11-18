@@ -18,7 +18,19 @@ var Country = new Schema({
         maxlength: 15,
         enum: ['Asia', 'Europe', 'North America', 'Africa', 'Oceania', 'Antarctica', 'South America'],
         default: 'Asia',
-        required: true }
+        required: true },
+    capital: { type: Number},
+    capitalCity: { type: String, ref: 'City'},
+    surfacearea: { type: Number},
+    indepyear: { type: Number },
+    population: { type: Number },
+    lifeexpectancy: { type: Number },
+    gnp: { type: Number },
+    gnpold: { type: Number },
+    localname: { type: String },
+    governmentform: { type: String },
+    headofstate: { type: String },
+    code2: { type: String, minlength: 2, maxlength: 2}
 });
 
 Country.plugin(mongoosePaginate);
