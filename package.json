@@ -20,8 +20,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "seed-up": "node ./node_modules/mongo-migrate/index.js -runmm up",
-    "seed-down": "node ./node_modules/mongo-migrate/index.js -runmm down"
+    "mongo-migrate": "node ./node_modules/mongo-migrate/index.js -runmm"
   },
   "keywords": [],
   "optionalDependencies": {},
