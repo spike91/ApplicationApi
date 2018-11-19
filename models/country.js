@@ -20,7 +20,7 @@ var Country = new Schema({
         default: 'Asia',
         required: true },
     capital: { type: Number},
-    capitalCity: { ref: 'cities'},
+    capitalCity: { type: String, ref: 'cities'},
     surfacearea: { type: Number},
     indepyear: { type: Number },
     population: { type: Number },
