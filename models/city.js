@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate');
 var Schema = mongoose.Schema;
 
-// Schemas
 var citySchema = new Schema({
     id: { type: Number, unique: true },
     name: { type: String, maxlength: 100},
