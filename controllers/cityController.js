@@ -1,11 +1,12 @@
 var log = require('../libs/log')(module);
 var CityModel = require('../models/city').CityModel;
+var CountryModel = require('../models/country').CountryModel;
 
 exports.city_list = function(req, res) {
     var page = req.query.page ? req.query.page : 1
     var limit = req.query.limit ? req.query.limit : 10;
 
-    return CityModel.paginate({ page, limit }).then(function (result) {
+    return CityModel.paginate({},{ page, limit, populate: 'country' }).then(function (result) {
         if(!result) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
@@ -22,29 +23,37 @@ exports.city_list = function(req, res) {
 exports.city_by_country_name_list = function(req, res) {
     var page = req.query.page ? req.query.page : 1
     var limit = req.query.limit ? req.query.limit : 10;
-
-    return CityModel.find({ countrycode: req.params.name }, function (err, cities) {
-        if(!cities) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
+    var countriesId = [];
+    CountryModel.find({ name : req.params.name}, function(err, result){
+        if(result) {
+            result.forEach(element => {
+                countriesId.push(element._id);
+            });
         }
-        if (!err) {
-            return res.send({ status: 'OK', cities:cities });
-        } else {
+    }).then(function(){
+        return CityModel.paginate({ country : { $in : countriesId }}, { page, limit, populate: 'country' }).then(function (result) {
+            if(!result) {
+                res.statusCode = 404;
+                return res.send({ error: 'Not found' });
+            }
+            return res.send({ status: 'OK', result:result });
+        },
+        function(error){
             res.statusCode = 500;
-            log.error(`Internal error(${res.statusCode}): ${err.message}`);
+            log.error(`Internal error(${res.statusCode}): ${error.message}`);
             return res.send({ error: 'Server error' });
-        }
-    });
+        });
+    });  
+
 };
 
 exports.create = function(req, res) {
     var city = new CityModel({
-        //id: req.body.id,
         name: req.body.name,
         countrycode: req.body.code,
         district: req.body.district,
-        population: req.body.population
+        population: req.body.population,
+        country: req.body.country
     });
 
     var seq = 1;
