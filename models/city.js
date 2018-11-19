@@ -9,10 +9,10 @@ var citySchema = new Schema({
     countrycode: { type: String, maxlength: 3, minlength: 3},
     district: { type: String, maxlength: 100},
     population: { type: Number, default: 0 },
-    country: { type: String, ref: 'Country'}
+    country: { ref: 'countries'}
 });
 
 citySchema.plugin(mongoosePaginate);
-var CityModel = mongoose.model('City', citySchema);
+var CityModel = mongoose.model('cities', citySchema);
 
 module.exports.CityModel = CityModel;

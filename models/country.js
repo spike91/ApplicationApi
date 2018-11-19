@@ -20,7 +20,7 @@ var Country = new Schema({
         default: 'Asia',
         required: true },
     capital: { type: Number},
-    capitalCity: { type: String, ref: 'City'},
+    capitalCity: { ref: 'cities'},
     surfacearea: { type: Number},
     indepyear: { type: Number },
     population: { type: Number },
@@ -34,6 +34,6 @@ var Country = new Schema({
 });
 
 Country.plugin(mongoosePaginate);
-var CountryModel = mongoose.model('Country', Country);
+var CountryModel = mongoose.model('countries', Country);
 
 module.exports.CountryModel = CountryModel;

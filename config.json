@@ -2,6 +2,7 @@
     "port" : 1337,
     "secret": "",
     "mongoose": {
-        "uri": ""
+        "uri": "",
+        "uri-prod": ""
     }
 }

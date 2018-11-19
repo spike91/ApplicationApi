@@ -9,8 +9,8 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.3.0",
     "method-override": "^3.0.0",
+    "mongo-migrate": "^2.0.2",
     "mongoose": "^5.3.11",
-    "mongoose-auto-increment": "^5.0.1",
     "mongoose-paginate": "^5.0.3",
     "morgan": "^1.9.1",
     "nconf": "^0.10.0",
@@ -20,13 +20,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "initDB": "node data/initDB.js"
+    "seed-up": "node ./node_modules/mongo-migrate/index.js -runmm up",
+    "seed-down": "node ./node_modules/mongo-migrate/index.js -runmm down"
   },
   "keywords": [],
   "optionalDependencies": {},
-  "peerDependencies": {
-    "mongoose": "^4.1.12"
-  },
   "author": "",
   "license": "ISC"
 }
