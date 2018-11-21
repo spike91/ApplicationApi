@@ -6,7 +6,7 @@ var path = require('path');
 var log = require('./libs/log')(module);
 var config = require('./libs/config');
 var mongoose = require('mongoose');
-var connection = require('./libs/mongoose').connection;
+var connection = require('./libs/mongoose-prod').connection;
 
 var app = express();
 
@@ -41,3 +41,5 @@ app.use(function(err, req, res, next){
 app.listen(config.get('port'), function(){
     log.info(`Express server listening on port ${config.get('port')}`);
 });
+
+module.exports = app;

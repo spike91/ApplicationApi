@@ -8,7 +8,7 @@ var citySchema = new Schema({
     countrycode: { type: String, maxlength: 3, minlength: 3},
     district: { type: String, maxlength: 100},
     population: { type: Number, default: 0 },
-    country: { type: mongoose.Types.ObjectId, ref: 'countries'}
+    country: { type: String, ref: 'countries'}
 });
 
 citySchema.plugin(mongoosePaginate);

@@ -19,7 +19,7 @@ var Country = new Schema({
         default: 'Asia',
         required: true },
     capital: { type: Number},
-    capitalCity: { type: mongoose.Types.ObjectId, ref: 'cities'},
+    capitalCity: { type: String, ref: 'cities'},
     surfacearea: { type: Number},
     indepyear: { type: Number },
     population: { type: Number },

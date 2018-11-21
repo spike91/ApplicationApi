@@ -16,10 +16,14 @@
     "nconf": "^0.10.0",
     "winston": "^3.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "test": "mocha --timeout 10000",
+    "start": "SET NODE_ENV=dev && node server.js",
     "mongo-migrate": "node ./node_modules/mongo-migrate/index.js -runmm"
   },
   "keywords": [],

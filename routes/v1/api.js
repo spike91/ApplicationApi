@@ -30,7 +30,7 @@ router.get('/world/city/all', Authentification, CityController.city_list);
 
 // City CRUD
 
-router.get('/world/city/:id', Authentification, Authorization, CityController.getById);
+router.get('/world/city/:id', Authentification, CityController.getById);
 router.post('/world/city', Authentification, Authorization, CityController.create);
 router.put('/world/city/:id', Authentification, Authorization, CityController.update);
 router.delete('/world/city/:id', Authentification, Authorization, CityController.delete);

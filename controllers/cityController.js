@@ -1,6 +1,7 @@
 var log = require('../libs/log')(module);
 var CityModel = require('../models/city').CityModel;
 var CountryModel = require('../models/country').CountryModel;
+var mongoose = require('mongoose');
 
 exports.city_list = function(req, res) {
     var page = req.query.page ? req.query.page : 1
@@ -87,6 +88,7 @@ exports.create = function(req, res) {
 
 exports.getById = function(req, res) {
     return CityModel.findById(req.params.id, function (err, city) {
+        log.info(err);
         if(!city) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
