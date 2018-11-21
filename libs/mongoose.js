@@ -7,7 +7,7 @@ function open(){
         if(process.env.NODE_ENV === 'test') {
             uri = config.get("mongoose:uri-test");
         }else{
-            uri = config.get("mongoose:uri-prod");
+            uri = config.get("mongoose:uri");
         }
         mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true }, (err, res) => {
              if(err) log.error('connection error:', err.message);
