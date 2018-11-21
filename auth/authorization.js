@@ -6,9 +6,9 @@ var authorization = function (req, res, next) {
     var msg = {auth: false, message: 'Permissions denied.'};
     UserService.getUserByEmail(email).then(function(result){
             if(result == null) {
-                res.status(500).send(msg);
+                res.status(404).send(msg);
             } else 
-            if (!result.isAdmin) res.status(500).send(msg);
+            if (!result.isAdmin) res.status(401).send(msg);
             else next();
         },
         function (error) {
