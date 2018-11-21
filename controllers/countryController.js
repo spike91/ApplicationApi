@@ -5,7 +5,7 @@ exports.country_list = function(req, res) {
     var page = req.query.page ? req.query.page : 1
     var limit = req.query.limit ? req.query.limit : 10;
 
-    return CountryModel.paginate({}, { page, limit }).then(function (result) {
+    return CountryModel.paginate({}, { page, limit, populate: 'capitalCity' }).then(function (result) {
         if(!result) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
