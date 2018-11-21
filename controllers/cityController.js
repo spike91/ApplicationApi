@@ -59,19 +59,15 @@ exports.create = function(req, res) {
 
     var seq = 1;
     CityModel.find(function(err, result){
-
         if(!err && result.length > 0){
             seq = result[0].id + 1;
         }
-
         city.id = seq ? seq : 1;
 
         city.save(function (err) {
             if (!err) {
-                log.info("city created");
                 return res.send({ status: 'OK', city:city });
             } else {
-                console.log(err);
                 if(err.name == 'ValidationError') {
                     res.statusCode = 400;
                     res.send({ error: 'Validation error' });
@@ -88,7 +84,6 @@ exports.create = function(req, res) {
 
 exports.getById = function(req, res) {
     return CityModel.findById(req.params.id, function (err, city) {
-        log.info(err);
         if(!city) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
@@ -104,7 +99,7 @@ exports.getById = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    return CityModel.findByIdAndUpdate(req.params.id, {$set: req.body}, function(err, city){
+    return CityModel.findOneAndUpdate(req.params.id, {$set: req.body}, function(err, city){
         if (!err) {
             return res.send({ status: 'OK', message: 'City updated.' });
         }else {

@@ -2,7 +2,6 @@ var UserService = require('../services/userService');
 var log = require('../libs/log')(module);
 
 exports.createUser = async function (req, res, next) {
-    log.info(req.body);
     var User = {
         name: req.body.name,
         email: req.body.email,
@@ -12,7 +11,7 @@ exports.createUser = async function (req, res, next) {
         var createdUser = await UserService.createUser(User)
         return res.status(201).json({data: createdUser, message: "Succesfully Created User"})
     } catch (e) {
-        log.info(e.message);
+        log.error(e.message);
         return res.status(400).json({status: 400, message: "User Creation was Unsuccesfull"})
     }
 }

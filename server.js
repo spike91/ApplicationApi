@@ -5,9 +5,9 @@ var api = require('./routes/v1/api');
 var path = require('path'); 
 var log = require('./libs/log')(module);
 var config = require('./libs/config');
-var mongoose = require('mongoose');
-var connection = require('./libs/mongoose-prod').connection;
+var connection = require('./libs/mongoose');
 
+connection.open();
 var app = express();
 
 app.use(methodOverride('X-HTTP-Method-Override'));
@@ -17,7 +17,6 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     next();
 });
-app.use(express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -39,7 +38,9 @@ app.use(function(err, req, res, next){
 });
 
 app.listen(config.get('port'), function(){
-    log.info(`Express server listening on port ${config.get('port')}`);
+    if(process.env.NODE_ENV !== 'test') log.info(`Express server listening on port ${config.get('port')}`);
 });
 
-module.exports = app;
+
+module.exports.server = app;
+module.exports.connection = connection;

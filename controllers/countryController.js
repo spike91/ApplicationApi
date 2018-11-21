@@ -60,7 +60,6 @@ exports.country_create = function(req, res) {
 
     country.save(function (err) {
         if (!err) {
-            log.info("country created");
             return res.send({ status: 'OK', country: country });
         } else {
             console.log(err);

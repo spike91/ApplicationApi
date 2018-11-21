@@ -3,6 +3,6 @@
     "secret": "",
     "mongoose": {
         "uri": "",
-        "uri-prod": ""
+        "uri-test" : ""
     }
 }

@@ -2,13 +2,21 @@ var mongoose = require('mongoose');
 var log = require('./log')(module);
 var config = require('./config');
 
-mongoose.connect(config.get('mongoose:uri'), { useNewUrlParser: true });
-mongoose.set('useCreateIndex', true);
+function open(){
+    var uri = "";
+        if(process.env.NODE_ENV === 'test') {
+            uri = config.get("mongoose:uri-test");
+        }else{
+            uri = config.get("mongoose:uri-prod");
+        }
+        mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true }, (err, res) => {
+             if(err) log.error('connection error:', err.message);
+        });
 
-var db = mongoose.connection;
+}
 
-db.on('error', function (err) {
-    log.error('connection error:', err.message);
-});
+function close(){
+    return mongoose.disconnect();
+}
 
-module.exports.connection = db;
+module.exports = { close, open };

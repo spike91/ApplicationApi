@@ -1,17 +1,14 @@
 //During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
-
-let mongoose = require("mongoose");
 let City = require('../models/city').CityModel;
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let server = require('../server');
+let server = require('../server').server;
 let should = chai.should();
-var log = require('../libs/log')(module);
 
 chai.use(chaiHttp);
 
-describe('City', () => {
+describe('City CRUD testing', () => {
     let token = "";
 
     beforeEach((done) => { // clear database 
@@ -32,12 +29,20 @@ describe('City', () => {
             }); 
 
             afterEach((done) => { 
-                done();  
-            }); 
+                City.deleteMany({}, (err) => {                  
+                    done();        
+                    }); 
+            });
+
+            after((done) => { 
+                require('../server').connection.close();
+                done();
+            });
+                
 /*
   * tests
   */
-  describe('/GET city all', () => {
+  describe('/GET city all (route \'/api/v1/world/city/all\')', () => {
       it('it should GET empty array', (done) => {
         chai.request(server)
             .get('/api/v1/world/city/all')
@@ -62,7 +67,6 @@ describe('City', () => {
           .set('x-access-token' , token)
           .send({name:'Kohtla-Jarve', id: 1, district: "Ida", population: 10000})
           .end((err, res) => {
-              log.info(res.body);
               res.status.should.equal(200);
               res.body.city.should.be.a('object');
               res.body.city.name.should.be.eql('Kohtla-Jarve');
@@ -73,7 +77,7 @@ describe('City', () => {
     });
 });
 
-describe('/GET city all', () => {
+describe('/GET city all (route \'/api/v1/world/city/all\')', () => {
     it('it should GET array with one element', (done) => {
         let city = new City({name:'Kohtla-Jarve', id: 1, district: "Ida", population: 10000});
         city.save((err, city) => {
@@ -107,6 +111,8 @@ describe('/GET city all', () => {
     });
 
     it('it should GET city by Id', (done) => {
+        let city = new City({name:'Kohtla-Jarve', id: 1, district: "Ida", population: 10000});
+        city.save((err, city) => {
       chai.request(server)
           .get('/api/v1/world/city/'+city._id)
           .set('x-access-token' , token)
@@ -114,11 +120,14 @@ describe('/GET city all', () => {
               res.status.should.equal(200);
             done();
           });
+        });
     });
 });
 
 describe('/PUT city (route \'/api/v1/world/city/:id\')', () => {
     it('it should GET city by Id', (done) => {
+        let city = new City({name:'Kohtla-Jarve', id: 1, district: "Ida", population: 10000});
+        city.save((err, city) => {
         city.name = "Johvi";
       chai.request(server)
           .put('/api/v1/world/city/'+city._id)
@@ -129,20 +138,24 @@ describe('/PUT city (route \'/api/v1/world/city/:id\')', () => {
               res.body.should.have.property('message').eql('City updated.');
             done();
           });
+        });
     });
 });
 
 describe('/DELETE city (route \'/api/v1/world/city/:id\')', () => {
     it('it should GET city by Id', (done) => {
+        let city = new City({name:'Kohtla-Jarve', id: 1, district: "Ida", population: 10000});
+        city.save((err, city) => {
       chai.request(server)
           .delete('/api/v1/world/city/'+city._id)
           .set('x-access-token' , token)
           .end((err, res) => {
               res.status.should.equal(200);
               res.body.city.should.be.a('object');
-              res.body.city._id.should.be.eql(city._id);
+              res.body.city._id.should.be.eql(city._id.toString());
             done();
           });
+        });
     });
 });
 

@@ -19,10 +19,11 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "mockgoose": "^7.3.5"
   },
   "scripts": {
-    "test": "mocha --timeout 10000",
+    "test": "mocha --timeout 120000 --exit",
     "start": "SET NODE_ENV=dev && node server.js",
     "mongo-migrate": "node ./node_modules/mongo-migrate/index.js -runmm"
   },
